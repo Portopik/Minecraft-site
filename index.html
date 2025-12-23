@@ -6,6 +6,14 @@
     <title>Автостопом по краю - Minecraft проект</title>
     <style>
         * {
+            box<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автостопом по краю - Minecraft проект</title>
+    <style>
+        * {
             box-sizing: border-box;
         }
         
@@ -125,25 +133,11 @@
             left: 0;
         }
         
-        .progress-bar {
-            height: 25px;
-            background-color: #2c4221;
-            border: 2px solid #5a7d32;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3b5c1e, #5a7d32);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            transition: width 1s;
-        }
+        .mc-list li:nth-child(2)::before { content: "⚔"; }
+        .mc-list li:nth-child(3)::before { content: "✨"; }
+        .mc-list li:nth-child(4)::before { content: "🚜"; }
+        .mc-list li:nth-child(5)::before { content: "🛡"; }
+        .mc-list li:nth-child(6)::before { content: "🏘"; }
         
         /* Кнопка Gameram */
         .gameram-button {
@@ -192,7 +186,7 @@
     <div class="container">
         <!-- Аккордеон -->
         <div class="accordion">
-            <!-- Секция 1 -->
+            <!-- Секция 1: Что такое проект -->
             <div class="accordion-item">
                 <button class="accordion-button" onclick="toggleAccordion(0)">
                     <span>❓ Что такое «Автостопом по краю»?</span>
@@ -203,7 +197,7 @@
                 </div>
             </div>
             
-            <!-- Секция 2 -->
+            <!-- Секция 2: Цели проекта -->
             <div class="accordion-item">
                 <button class="accordion-button" onclick="toggleAccordion(1)">
                     <span>🎯 Какие цели у проекта?</span>
@@ -221,40 +215,13 @@
                 </div>
             </div>
             
-            <!-- Секция 3 -->
+            <!-- Секция 3: Новости в Gameram -->
             <div class="accordion-item">
                 <button class="accordion-button" onclick="toggleAccordion(2)">
-                    <span>📊 Текущий прогресс</span>
-                    <span class="accordion-icon">▼</span>
-                </button>
-                <div class="accordion-content" id="content2">
-                    <p><strong>Деревня с жителями:</strong> 40%</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 40%">40%</div>
-                    </div>
-                    
-                    <p><strong>Поиск крепости:</strong> 25%</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 25%">25%</div>
-                    </div>
-                    
-                    <p><strong>Уже построено:</strong></p>
-                    <ul>
-                        <li>Стартовая база</li>
-                        <li>Автоматическая ферма пшеницы</li>
-                        <li>Шахта до 12 уровня</li>
-                        <li>3 дома для жителей</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Секция 4: Gameram -->
-            <div class="accordion-item">
-                <button class="accordion-button" onclick="toggleAccordion(3)">
                     <span>📢 Новости проекта</span>
                     <span class="accordion-icon">▼</span>
                 </button>
-                <div class="accordion-content" id="content3">
+                <div class="accordion-content" id="content2">
                     <p>Все обновления, скриншоты и новости о проекте публикую в своём канале Gameram:</p>
                     
                     <a href="https://web.gameram.com/profile/Monchick" 
@@ -307,6 +274,12 @@
         
         // Автоматически открываем первую секцию
         window.onload = function() {
+            toggleAccordion(0);
+            console.log("Сайт проекта 'Автостопом по краю' загружен!");
+        };
+    </script>
+</body>
+</html>       window.onload = function() {
             toggleAccordion(0);
             console.log("Сайт проекта 'Автостопом по краю' загружен!");
         };
