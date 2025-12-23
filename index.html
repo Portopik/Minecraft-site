@@ -4,701 +4,716 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Автостопом по краю - Minecraft проект</title>
-    
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Minecraft шрифт -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
-        :root {
-            --mc-green: #5b7c3a;
-            --mc-dark-green: #3b5228;
-            --mc-brown: #8b4513;
-            --mc-dark-brown: #654321;
-            --mc-blue: #3d85c6;
-            --mc-dark-blue: #1f3d7a;
-            --mc-black: #1e1e1e;
-            --mc-gray: #7a7a7a;
-        }
-        
         body {
-            background-color: #2d2d2d;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             color: #f0f0f0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-top: 20px;
-        }
-        
-        .minecraft-font {
-            font-family: 'Press Start 2P', cursive;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
         }
         
         .header {
-            background: linear-gradient(135deg, var(--mc-green) 0%, var(--mc-dark-green) 100%);
-            border: 5px solid var(--mc-brown);
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, #5b7c3a 0%, #3b5228 100%);
+            border: 5px solid #8b4513;
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b4513, #ffd700, #8b4513);
+        }
+        
+        h1 {
+            color: white;
             text-shadow: 3px 3px 0 #000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        
-        .header h1 {
-            color: #fff;
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin: 0;
         }
         
-        .header p {
-            color: #d0d0d0;
+        .subtitle {
+            color: #d0ffb0;
             font-size: 1.2rem;
-        }
-        
-        .accordion-item {
-            background-color: var(--mc-dark-brown);
-            border: 3px solid var(--mc-brown);
-            margin-bottom: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .accordion-button {
-            background-color: var(--mc-brown);
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 15px 20px;
-            border: none;
-        }
-        
-        .accordion-button:not(.collapsed) {
-            background-color: var(--mc-green);
-            color: white;
-        }
-        
-        .accordion-body {
-            background-color: #3a2c1d;
-            color: #f0f0f0;
-            padding: 20px;
-            border-top: 2px solid var(--mc-brown);
-        }
-        
-        .goal-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        
-        .goal-list li {
-            padding: 8px 0;
-            border-bottom: 1px dashed #5a4a3a;
-            display: flex;
-            align-items: center;
-        }
-        
-        .goal-list li:before {
-            content: "✓ ";
-            color: var(--mc-green);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .minecraft-btn {
-            background-color: var(--mc-green);
-            border: 3px solid var(--mc-dark-green);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-        
-        .minecraft-btn:hover {
-            background-color: var(--mc-dark-green);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .gallery-item {
-            border: 3px solid var(--mc-brown);
-            border-radius: 5px;
-            overflow: hidden;
-            background-color: #1a1a1a;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-        
-        .comment-section {
-            background-color: #2a2a2a;
-            border: 3px solid var(--mc-blue);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .comment {
-            background-color: #3a3a3a;
-            border-left: 4px solid var(--mc-green);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .comment-author {
-            font-weight: bold;
-            color: var(--mc-green);
-        }
-        
-        .comment-time {
-            color: var(--mc-gray);
-            font-size: 0.9rem;
-        }
-        
-        .comment-actions {
             margin-top: 10px;
         }
         
-        .vote-btn {
-            background: none;
-            border: none;
-            color: #aaa;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        
-        .vote-btn:hover {
-            color: var(--mc-green);
-        }
-        
-        .vote-count {
-            font-weight: bold;
-            margin: 0 5px;
-        }
-        
-        .reply-btn {
-            background: none;
-            border: none;
-            color: var(--mc-blue);
-            cursor: pointer;
-        }
-        
-        .reply-section {
-            margin-left: 30px;
-            margin-top: 15px;
-            border-left: 2px solid #444;
-            padding-left: 15px;
-        }
-        
-        .poll-section {
-            background-color: #2a2a2a;
-            border: 3px solid var(--mc-green);
+        .section {
+            background: #3a2c1d;
+            border: 3px solid #654321;
             border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .poll-option {
-            background-color: #3a3a3a;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .poll-option:hover {
-            background-color: #4a4a4a;
-        }
-        
-        .poll-option.selected {
-            background-color: var(--mc-dark-green);
-            border-left: 4px solid var(--mc-green);
-        }
-        
-        .poll-results {
-            margin-top: 20px;
-        }
-        
-        .progress-bar {
-            background-color: #444;
-            height: 20px;
-            border-radius: 10px;
+            margin: 20px 0;
             overflow: hidden;
-            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
-        .progress-fill {
-            height: 100%;
-            background-color: var(--mc-green);
-            border-radius: 10px;
+        .question {
+            background: #8b4513;
+            color: white;
+            padding: 18px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            border-bottom: 2px solid #654321;
         }
         
-        .auth-modal {
+        .question:hover {
+            background: #a0522d;
+        }
+        
+        .question::after {
+            content: "▼";
+            transition: transform 0.3s;
+        }
+        
+        .question.active::after {
+            transform: rotate(180deg);
+        }
+        
+        .answer {
+            padding: 20px;
+            background: #2a1f14;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .goal-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .goal-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #5a4a3a;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .goal-list li::before {
+            content: "⚔️";
+            position: absolute;
+            left: 0;
+        }
+        
+        .goal-list li:nth-child(2)::before { content: "🐉"; }
+        .goal-list li:nth-child(3)::before { content: "⛏️"; }
+        .goal-list li:nth-child(4)::before { content: "🏭"; }
+        .goal-list li:nth-child(5)::before { content: "🛡️"; }
+        .goal-list li:nth-child(6)::before { content: "🏘️"; }
+        
+        .auth-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        button {
+            background: #3d85c6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid #1f3d7a;
+        }
+        
+        button:hover {
+            background: #2b6cb0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(43, 108, 176, 0.4);
+        }
+        
+        .logout-btn {
+            background: #e53e3e;
+            border-color: #c53030;
+        }
+        
+        .logout-btn:hover {
+            background: #c53030;
+        }
+        
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.8);
             z-index: 1000;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
         
-        .auth-form {
-            background-color: #2a2a2a;
+        .modal-content {
+            background: #2d2d2d;
             padding: 30px;
-            border-radius: 10px;
-            border: 3px solid var(--mc-brown);
+            border-radius: 15px;
+            border: 3px solid #5b7c3a;
             width: 90%;
             max-width: 400px;
+            position: relative;
         }
         
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background-color: #444;
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
             border: none;
             color: white;
+            font-size: 1.5rem;
             cursor: pointer;
+            padding: 5px;
         }
         
-        .auth-tab.active {
-            background-color: var(--mc-green);
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #5b7c3a;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: white;
+            border-bottom-color: #5b7c3a;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #3a3a3a;
+            border: 2px solid #555;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #5b7c3a;
+        }
+        
+        .error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success {
+            color: #51cf66;
+            background: rgba(81, 207, 102, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .comment-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #5a4a3a;
+        }
+        
+        .comment {
+            background: #3a3a3a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #5b7c3a;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .comment-author {
+            color: #5b7c3a;
             font-weight: bold;
         }
         
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #3a3a3a;
-            border: 2px solid #555;
-            border-radius: 5px;
-            color: white;
+        .comment-time {
+            color: #888;
         }
         
-        .user-menu {
+        .vote-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .vote-btn {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .like-btn { color: #51cf66; }
+        .dislike-btn { color: #ff6b6b; }
+        
+        .poll-section {
+            margin-top: 40px;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #3d85c6;
+        }
+        
+        .poll-option {
+            background: #3a3a3a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .poll-option:hover {
+            background: #4a4a4a;
+        }
+        
+        .poll-option.selected {
+            background: #2b6cb0;
+            border-left: 4px solid #3d85c6;
+        }
+        
+        .user-info {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
+            background: #3a2c1d;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #5b7c3a;
+            display: none;
             z-index: 100;
         }
         
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--mc-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .username {
+            color: #ffd700;
             font-weight: bold;
-            cursor: pointer;
-            border: 2px solid white;
         }
         
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 50px;
-            background-color: #2a2a2a;
-            border: 2px solid var(--mc-brown);
-            border-radius: 5px;
-            min-width: 200px;
-        }
-        
-        .dropdown-menu.show {
-            display: block;
-        }
-        
-        .dropdown-item {
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
-        }
-        
-        .dropdown-item:hover {
-            background-color: var(--mc-green);
-        }
-        
-        .error-message {
-            color: #ff6b6b;
-            background-color: rgba(255, 107, 107, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: none;
-        }
-        
-        .success-message {
-            color: #51cf66;
-            background-color: rgba(81, 207, 102, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: none;
-        }
-        
-        .create-poll-btn {
-            background-color: var(--mc-blue);
-            border: 3px solid var(--mc-dark-blue);
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
                 font-size: 1.8rem;
             }
             
-            .gallery-container {
-                grid-template-columns: 1fr;
+            .auth-buttons {
+                position: static;
+                margin-bottom: 20px;
+                justify-content: center;
             }
             
-            .reply-section {
-                margin-left: 15px;
+            .user-info {
+                position: static;
+                margin: 10px 0;
             }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+        
+        .loading::after {
+            content: "...";
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
         }
     </style>
 </head>
 <body>
-    <!-- User Menu -->
-    <div class="user-menu">
-        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">
-            <i class="fas fa-user"></i>
-        </div>
-        <div class="dropdown-menu" id="userDropdown">
-            <div class="dropdown-item" id="userName">Гость</div>
-            <div class="dropdown-item" onclick="showAuthModal('login')">Войти</div>
-            <div class="dropdown-item" onclick="showAuthModal('register')">Регистрация</div>
-            <div class="dropdown-item" onclick="logout()" style="display: none;" id="logoutBtn">Выйти</div>
-        </div>
+    <!-- Кнопки авторизации -->
+    <div class="auth-buttons">
+        <button onclick="showAuthModal()" id="loginBtn">Войти</button>
+        <button onclick="showAuthModal('register')" id="registerBtn">Регистрация</button>
+        <button onclick="logout()" class="logout-btn" id="logoutBtn" style="display: none;">Выйти</button>
     </div>
-
-    <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-form">
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchAuthTab('login')">Вход</button>
-                <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
+    
+    <!-- Информация о пользователе -->
+    <div class="user-info" id="userInfo">
+        Привет, <span class="username" id="usernameSpan"></span>!
+    </div>
+    
+    <!-- Модальное окно авторизации -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="hideAuthModal()">×</button>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Вход</button>
+                <button class="tab" onclick="switchTab('register')">Регистрация</button>
             </div>
             
+            <!-- Форма входа -->
             <div id="loginForm">
-                <div class="error-message" id="loginError"></div>
-                <input type="email" class="form-input" id="loginEmail" placeholder="Email">
-                <input type="password" class="form-input" id="loginPassword" placeholder="Пароль">
-                <button class="minecraft-btn w-100" onclick="login()">Войти</button>
+                <div class="error" id="loginError"></div>
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="login()" style="width: 100%;">Войти</button>
             </div>
             
+            <!-- Форма регистрации -->
             <div id="registerForm" style="display: none;">
-                <div class="error-message" id="registerError"></div>
-                <div class="success-message" id="registerSuccess"></div>
-                <input type="text" class="form-input" id="registerUsername" placeholder="Имя пользователя" onblur="checkUsername()">
-                <div id="usernameStatus"></div>
-                <input type="email" class="form-input" id="registerEmail" placeholder="Email">
-                <input type="password" class="form-input" id="registerPassword" placeholder="Пароль (мин. 6 символов)">
-                <input type="password" class="form-input" id="registerConfirmPassword" placeholder="Подтвердите пароль">
-                <button class="minecraft-btn w-100" onclick="register()">Зарегистрироваться</button>
-            </div>
-            
-            <button class="minecraft-btn w-100 mt-3" style="background-color: #444;" onclick="hideAuthModal()">Отмена</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Header -->
-        <div class="header text-center">
-            <h1 class="minecraft-font">🔨 Автостопом по краю ⚔️</h1>
-            <p class="minecraft-font">Мой Minecraft проект</p>
-        </div>
-
-        <!-- Аккордеон с информацией -->
-        <div class="accordion" id="projectAccordion">
-            <!-- Секция 1 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                        <i class="fas fa-question-circle me-2"></i> Что такое «Автостопом по краю»?
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#projectAccordion">
-                    <div class="accordion-body">
-                        <p>"Автостопом по краю" — это проект в Майнкрафте где я просто строю дома и прохожу весь майнкрафт.</p>
-                        
-                        <!-- Комментарии для этой секции -->
-                        <div class="comment-section mt-4">
-                            <h5><i class="fas fa-comments me-2"></i>Комментарии к разделу</h5>
-                            <div class="mb-3">
-                                <textarea class="form-input" id="commentWhat" placeholder="Ваш комментарий..." rows="2"></textarea>
-                                <button class="minecraft-btn mt-2" onclick="addComment('what')">Отправить</button>
-                            </div>
-                            <div id="commentsWhat"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Секция 2 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                        <i class="fas fa-bullseye me-2"></i> Какие цели у проекта?
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#projectAccordion">
-                    <div class="accordion-body">
-                        <ul class="goal-list">
-                            <li>Построить полноценную деревню с жителями (дать всем профессии)</li>
-                            <li>Убить Эндер Дракона</li>
-                            <li>Получить лучший незеритовый инструмент почти со всеми чарами</li>
-                            <li>Построить как минимум 3 автоматических фермы</li>
-                            <li>Получить лучший незеритовый сет брони</li>
-                            <li>Построить полноценный город</li>
-                        </ul>
-                        
-                        <!-- Комментарии для этой секции -->
-                        <div class="comment-section mt-4">
-                            <h5><i class="fas fa-comments me-2"></i>Комментарии к разделу</h5>
-                            <div class="mb-3">
-                                <textarea class="form-input" id="commentGoals" placeholder="Ваш комментарий..." rows="2"></textarea>
-                                <button class="minecraft-btn mt-2" onclick="addComment('goals')">Отправить</button>
-                            </div>
-                            <div id="commentsGoals"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Секция 3 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-                        <i class="fas fa-chart-line me-2"></i> Что уже сделано?
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#projectAccordion">
-                    <div class="accordion-body">
-                        <div class="progress mb-3">
-                            <div class="progress-bar" role="progressbar" style="width: 40%">40% выполнено</div>
-                        </div>
-                        <p>Здесь будет информация о текущем прогрессе...</p>
-                        
-                        <!-- Комментарии для этой секции -->
-                        <div class="comment-section mt-4">
-                            <h5><i class="fas fa-comments me-2"></i>Комментарии к разделу</h5>
-                            <div class="mb-3">
-                                <textarea class="form-input" id="commentProgress" placeholder="Ваш комментарий..." rows="2"></textarea>
-                                <button class="minecraft-btn mt-2" onclick="addComment('progress')">Отправить</button>
-                            </div>
-                            <div id="commentsProgress"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Секция 4 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
-                        <i class="fas fa-images me-2"></i> Посмотреть скриншоты
-                    </button>
-                </h2>
-                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#projectAccordion">
-                    <div class="accordion-body">
-                        <div class="gallery-container">
-                            <!-- Галерея будет заполняться JavaScript -->
-                            <div class="text-center py-5">
-                                <p>Скриншоты скоро появятся!</p>
-                                <button class="minecraft-btn" onclick="loadGallery()">Загрузить скриншоты</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Комментарии для этой секции -->
-                        <div class="comment-section mt-4">
-                            <h5><i class="fas fa-comments me-2"></i>Комментарии к разделу</h5>
-                            <div class="mb-3">
-                                <textarea class="form-input" id="commentScreenshots" placeholder="Ваш комментарий..." rows="2"></textarea>
-                                <button class="minecraft-btn mt-2" onclick="addComment('screenshots')">Отправить</button>
-                            </div>
-                            <div id="commentsScreenshots"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Раздел опросов -->
-        <div class="poll-section">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3><i class="fas fa-poll me-2"></i>Опросы сообщества</h3>
-                <button class="minecraft-btn create-poll-btn" onclick="showCreatePollModal()" id="createPollBtn" style="display: none;">
-                    <i class="fas fa-plus me-2"></i>Создать опрос
-                </button>
-            </div>
-            
-            <div id="pollsContainer">
-                <!-- Опросы будут загружены здесь -->
-                <p class="text-center">Загрузка опросов...</p>
+                <div class="error" id="registerError"></div>
+                <div class="success" id="registerSuccess"></div>
+                <input type="text" id="registerUsername" placeholder="Имя пользователя">
+                <input type="email" id="registerEmail" placeholder="Email">
+                <input type="password" id="registerPassword" placeholder="Пароль (минимум 6 символов)">
+                <button onclick="register()" style="width: 100%;">Зарегистрироваться</button>
             </div>
         </div>
     </div>
-
+    
+    <!-- Заголовок -->
+    <div class="header">
+        <h1>🔨 Автостопом по краю ⚔️</h1>
+        <div class="subtitle">Мой Minecraft проект</div>
+    </div>
+    
+    <!-- Секция 1: Что такое проект -->
+    <div class="section">
+        <div class="question" onclick="toggleAnswer(1)">
+            Что такое «Автостопом по краю»?
+        </div>
+        <div class="answer" id="answer1">
+            <p>"Автостопом по краю" — это проект в Майнкрафте где я просто строю дома и прохожу весь майнкрафт.</p>
+            
+            <!-- Комментарии для секции 1 -->
+            <div class="comment-section">
+                <h3>💬 Комментарии</h3>
+                <div id="comments1" class="loading">Загрузка комментариев</div>
+                <textarea id="commentInput1" placeholder="Напишите комментарий..." rows="2"></textarea>
+                <button onclick="addComment('what')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Секция 2: Цели проекта -->
+    <div class="section">
+        <div class="question" onclick="toggleAnswer(2)">
+            Какие цели у проекта?
+        </div>
+        <div class="answer" id="answer2">
+            <ul class="goal-list">
+                <li>Построить полноценную деревню с жителями (дать всем профессии)</li>
+                <li>Убить Эндер Дракона</li>
+                <li>Получить лучший незеритовый инструмент почти со всеми чарами</li>
+                <li>Построить как минимум 3 автоматических фермы</li>
+                <li>Получить лучший незеритовый сет брони</li>
+                <li>Построить полноценный город</li>
+            </ul>
+            
+            <!-- Комментарии для секции 2 -->
+            <div class="comment-section">
+                <h3>💬 Комментарии</h3>
+                <div id="comments2" class="loading">Загрузка комментариев</div>
+                <textarea id="commentInput2" placeholder="Напишите комментарий..." rows="2"></textarea>
+                <button onclick="addComment('goals')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Секция 3: Прогресс -->
+    <div class="section">
+        <div class="question" onclick="toggleAnswer(3)">
+            Что уже сделано?
+        </div>
+        <div class="answer" id="answer3">
+            <p>🟢 Построена первая хижина</p>
+            <p>🟢 Добыты алмазы</p>
+            <p>🟡 Начато строительство фермы</p>
+            <p>🔴 Еще не убит Эндер Дракон</p>
+            
+            <!-- Комментарии для секции 3 -->
+            <div class="comment-section">
+                <h3>💬 Комментарии</h3>
+                <div id="comments3" class="loading">Загрузка комментариев</div>
+                <textarea id="commentInput3" placeholder="Напишите комментарий..." rows="2"></textarea>
+                <button onclick="addComment('progress')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Секция 4: Скриншоты -->
+    <div class="section">
+        <div class="question" onclick="toggleAnswer(4)">
+            Посмотреть скриншоты
+        </div>
+        <div class="answer" id="answer4">
+            <p>📸 Скриншоты скоро появятся здесь!</p>
+            
+            <!-- Комментарии для секции 4 -->
+            <div class="comment-section">
+                <h3>💬 Комментарии</h3>
+                <div id="comments4" class="loading">Загрузка комментариев</div>
+                <textarea id="commentInput4" placeholder="Напишите комментарий..." rows="2"></textarea>
+                <button onclick="addComment('screenshots')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Раздел опросов -->
+    <div class="poll-section">
+        <h2>📊 Опросы сообщества</h2>
+        <button onclick="createPollModal()" id="createPollBtn" style="display: none;">Создать опрос</button>
+        <div id="pollsContainer" class="loading">Загрузка опросов</div>
+    </div>
+    
     <!-- Модальное окно создания опроса -->
-    <div class="auth-modal" id="createPollModal">
-        <div class="auth-form" style="max-width: 500px;">
-            <h4 class="text-center mb-4">Создать новый опрос</h4>
-            <div class="error-message" id="pollError"></div>
-            <input type="text" class="form-input" id="pollQuestion" placeholder="Вопрос опроса">
+    <div class="modal" id="pollModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="hidePollModal()">×</button>
+            <h3>Создать новый опрос</h3>
+            <div class="error" id="pollError"></div>
+            <input type="text" id="pollQuestion" placeholder="Вопрос опроса">
             <div id="pollOptions">
-                <input type="text" class="form-input mb-2" placeholder="Вариант 1">
-                <input type="text" class="form-input mb-2" placeholder="Вариант 2">
+                <input type="text" placeholder="Вариант 1">
+                <input type="text" placeholder="Вариант 2">
             </div>
-            <button class="minecraft-btn" onclick="addPollOption()" style="background-color: var(--mc-gray);">
-                <i class="fas fa-plus me-2"></i>Добавить вариант
-            </button>
-            <div class="mt-3 d-flex justify-content-between">
-                <button class="minecraft-btn" onclick="createPoll()">Создать опрос</button>
-                <button class="minecraft-btn" style="background-color: #444;" onclick="hideCreatePollModal()">Отмена</button>
-            </div>
+            <button onclick="addPollOption()" style="background: #666; margin-top: 10px;">+ Добавить вариант</button>
+            <button onclick="createPoll()" style="width: 100%; margin-top: 20px;">Создать опрос</button>
         </div>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+    
     <script>
-        // Инициализация Supabase
-        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Замените на ваш URL
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Замените на ваш ключ
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-        // Глобальные переменные
+        // 🔧 НАСТРОЙКИ SUPABASE (твои данные уже здесь)
+        const SUPABASE_URL = 'https://vpgzjvkrqgvcewjhxuay.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_q-PJ_EmdubLQ9o46S1tVDg_XH1ucyHE';
+        
+        // 📦 ИНИЦИАЛИЗАЦИЯ SUPABASE
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // 👤 ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ
         let currentUser = null;
-        let replyingToComment = null;
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', async function() {
+        
+        // 🚀 ЗАГРУЗКА САЙТА
+        document.addEventListener('DOMContentLoaded', async () => {
             await checkAuth();
-            loadComments();
+            loadAllComments();
             loadPolls();
         });
-
-        // Проверка аутентификации
+        
+        // 🔄 ПРОВЕРКА АВТОРИЗАЦИИ
         async function checkAuth() {
             const { data: { user } } = await supabase.auth.getUser();
             
             if (user) {
                 currentUser = user;
-                updateUIForLoggedInUser();
-                
-                // Получаем профиль пользователя
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('username')
-                    .eq('id', user.id)
-                    .single();
-                
-                if (profile) {
-                    document.getElementById('userName').textContent = profile.username;
-                    document.getElementById('userAvatar').innerHTML = profile.username.charAt(0).toUpperCase();
-                }
+                showUserInfo(user);
             } else {
-                updateUIForGuest();
+                showGuestView();
             }
         }
-
-        // Обновление UI для авторизованного пользователя
-        function updateUIForLoggedInUser() {
+        
+        // 👤 ПОКАЗАТЬ ИНФО О ПОЛЬЗОВАТЕЛЕ
+        async function showUserInfo(user) {
+            // Показываем кнопку выхода
             document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('registerBtn').style.display = 'none';
+            
+            // Показываем кнопку создания опроса
             document.getElementById('createPollBtn').style.display = 'block';
             
-            // Обновляем аватар
-            const avatar = document.getElementById('userAvatar');
-            avatar.innerHTML = currentUser.email.charAt(0).toUpperCase();
-            avatar.style.backgroundColor = getRandomMinecraftColor();
-        }
-
-        // Обновление UI для гостя
-        function updateUIForGuest() {
-            document.getElementById('logoutBtn').style.display = 'none';
-            document.getElementById('createPollBtn').style.display = 'none';
-            document.getElementById('userName').textContent = 'Гость';
-            document.getElementById('userAvatar').innerHTML = '<i class="fas fa-user"></i>';
-        }
-
-        // Генерация случайного цвета Minecraft
-        function getRandomMinecraftColor() {
-            const colors = ['#5b7c3a', '#8b4513', '#3d85c6', '#a64d79', '#e69138'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        // Показать/скрыть dropdown меню
-        function toggleDropdown() {
-            document.getElementById('userDropdown').classList.toggle('show');
-        }
-
-        // Закрыть dropdown при клике вне его
-        window.onclick = function(event) {
-            if (!event.target.matches('.user-avatar')) {
-                const dropdowns = document.getElementsByClassName('dropdown-menu');
-                for (let dropdown of dropdowns) {
-                    dropdown.classList.remove('show');
-                }
+            // Получаем имя пользователя
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('username')
+                .eq('id', user.id)
+                .single();
+            
+            if (profile) {
+                document.getElementById('usernameSpan').textContent = profile.username;
+                document.getElementById('userInfo').style.display = 'block';
             }
         }
-
-        // Показать модальное окно аутентификации
-        function showAuthModal(tab) {
-            document.getElementById('authModal').style.display = 'flex';
-            switchAuthTab(tab);
+        
+        // 🎭 ПОКАЗАТЬ ВИД ДЛЯ ГОСТЯ
+        function showGuestView() {
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('registerBtn').style.display = 'block';
+            document.getElementById('createPollBtn').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'none';
         }
-
-        // Скрыть модальное окно аутентификации
+        
+        // 🔓 ВХОД
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            
+            if (!email || !password) {
+                errorEl.textContent = 'Заполните все поля';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+            
+            if (error) {
+                errorEl.textContent = error.message;
+                errorEl.style.display = 'block';
+            } else {
+                hideAuthModal();
+                location.reload();
+            }
+        }
+        
+        // 📝 РЕГИСТРАЦИЯ
+        async function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            
+            // Проверка
+            if (!username || !email || !password) {
+                errorEl.textContent = 'Заполните все поля';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorEl.textContent = 'Пароль должен быть минимум 6 символов';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            // Проверяем, занят ли username
+            const { data: existingUser } = await supabase
+                .from('profiles')
+                .select('username')
+                .eq('username', username)
+                .single();
+            
+            if (existingUser) {
+                errorEl.textContent = 'Это имя уже занято';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            // Регистрируем
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { username }
+                }
+            });
+            
+            if (error) {
+                errorEl.textContent = error.message;
+                errorEl.style.display = 'block';
+            } else {
+                // Создаем профиль
+                await supabase.from('profiles').insert({
+                    id: data.user.id,
+                    username: username
+                });
+                
+                successEl.textContent = 'Регистрация успешна! Проверьте почту.';
+                successEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                
+                // Через 3 секунды закрываем
+                setTimeout(() => {
+                    hideAuthModal();
+                    showAuthModal();
+                }, 3000);
+            }
+        }
+        
+        // 🚪 ВЫХОД
+        async function logout() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
+        
+        // 🪟 УПРАВЛЕНИЕ МОДАЛЬНЫМИ ОКНАМИ
+        function showAuthModal(tab = 'login') {
+            document.getElementById('authModal').style.display = 'flex';
+            switchTab(tab);
+        }
+        
         function hideAuthModal() {
             document.getElementById('authModal').style.display = 'none';
-            clearAuthForms();
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+            document.getElementById('registerSuccess').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
         }
-
-        // Переключение между вкладками входа и регистрации
-        function switchAuthTab(tab) {
-            const loginTab = document.querySelectorAll('.auth-tab')[0];
-            const registerTab = document.querySelectorAll('.auth-tab')[1];
+        
+        function switchTab(tab) {
+            const loginTab = document.querySelectorAll('.tab')[0];
+            const registerTab = document.querySelectorAll('.tab')[1];
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
             
@@ -713,312 +728,109 @@
                 loginForm.style.display = 'none';
                 registerForm.style.display = 'block';
             }
+        }
+        
+        // 📖 РАСКРЫТИЕ СЕКЦИЙ
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer${num}`);
+            const question = document.querySelector(`#answer${num}`).previousElementSibling;
             
-            // Очистка ошибок
-            clearAuthErrors();
-        }
-
-        // Очистка форм аутентификации
-        function clearAuthForms() {
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('registerUsername').value = '';
-            document.getElementById('registerEmail').value = '';
-            document.getElementById('registerPassword').value = '';
-            document.getElementById('registerConfirmPassword').value = '';
-            clearAuthErrors();
-        }
-
-        // Очистка ошибок аутентификации
-        function clearAuthErrors() {
-            document.getElementById('loginError').style.display = 'none';
-            document.getElementById('registerError').style.display = 'none';
-            document.getElementById('registerSuccess').style.display = 'none';
-            document.getElementById('usernameStatus').innerHTML = '';
-        }
-
-        // Вход
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorElement = document.getElementById('loginError');
-            
-            if (!email || !password) {
-                errorElement.textContent = 'Заполните все поля';
-                errorElement.style.display = 'block';
-                return;
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                question.classList.remove('active');
+            } else {
+                answer.style.display = 'block';
+                question.classList.add('active');
             }
+        }
+        
+        // 💬 КОММЕНТАРИИ
+        async function loadAllComments() {
+            for (let i = 1; i <= 4; i++) {
+                await loadComments(i);
+            }
+        }
+        
+        async function loadComments(sectionNum) {
+            const sectionMap = {
+                1: 'what',
+                2: 'goals', 
+                3: 'progress',
+                4: 'screenshots'
+            };
             
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            const section = sectionMap[sectionNum];
+            const container = document.getElementById(`comments${sectionNum}`);
+            
+            const { data: comments, error } = await supabase
+                .from('comments')
+                .select('*, profiles(username)')
+                .eq('section', section)
+                .order('created_at', { ascending: false });
             
             if (error) {
-                errorElement.textContent = error.message;
-                errorElement.style.display = 'block';
-            } else {
-                hideAuthModal();
-                location.reload();
-            }
-        }
-
-        // Регистрация
-        async function register() {
-            const username = document.getElementById('registerUsername').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            const errorElement = document.getElementById('registerError');
-            const successElement = document.getElementById('registerSuccess');
-            
-            // Валидация
-            if (!username || !email || !password || !confirmPassword) {
-                errorElement.textContent = 'Заполните все поля';
-                errorElement.style.display = 'block';
+                container.innerHTML = '<div class="error">Ошибка загрузки комментариев</div>';
                 return;
             }
             
-            if (password.length < 6) {
-                errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
-                errorElement.style.display = 'block';
+            if (!comments || comments.length === 0) {
+                container.innerHTML = '<p>Пока нет комментариев. Будьте первым!</p>';
                 return;
             }
             
-            if (password !== confirmPassword) {
-                errorElement.textContent = 'Пароли не совпадают';
-                errorElement.style.display = 'block';
-                return;
-            }
-            
-            // Проверка занятости username
-            const usernameCheck = await checkUsernameAvailability(username);
-            if (!usernameCheck.available) {
-                errorElement.textContent = usernameCheck.message;
-                errorElement.style.display = 'block';
-                return;
-            }
-            
-            // Регистрация
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        username: username
-                    }
-                }
-            });
-            
-            if (error) {
-                errorElement.textContent = error.message;
-                errorElement.style.display = 'block';
-            } else {
-                // Создание профиля пользователя
-                await supabase.from('profiles').insert({
-                    id: data.user.id,
-                    username: username
-                });
+            let html = '';
+            comments.forEach(comment => {
+                const username = comment.profiles?.username || 'Аноним';
+                const date = new Date(comment.created_at).toLocaleDateString('ru-RU');
                 
-                successElement.textContent = 'Регистрация успешна! Проверьте вашу почту для подтверждения.';
-                successElement.style.display = 'block';
-                errorElement.style.display = 'none';
-                
-                // Очистка формы через 3 секунды
-                setTimeout(() => {
-                    hideAuthModal();
-                }, 3000);
-            }
-        }
-
-        // Проверка доступности имени пользователя
-        async function checkUsername() {
-            const username = document.getElementById('registerUsername').value;
-            const statusElement = document.getElementById('usernameStatus');
-            
-            if (username.length < 3) {
-                statusElement.innerHTML = '<small style="color: #ff6b6b;">Минимум 3 символа</small>';
-                return;
-            }
-            
-            if (username.length > 20) {
-                statusElement.innerHTML = '<small style="color: #ff6b6b;">Максимум 20 символов</small>';
-                return;
-            }
-            
-            const result = await checkUsernameAvailability(username);
-            if (result.available) {
-                statusElement.innerHTML = '<small style="color: #51cf66;">✓ Имя доступно</small>';
-            } else {
-                statusElement.innerHTML = `<small style="color: #ff6b6b;">${result.message}</small>`;
-            }
-        }
-
-        // Проверка доступности username в базе данных
-        async function checkUsernameAvailability(username) {
-            // Проверяем только если username есть
-            if (!username || username.length < 3) {
-                return { available: false, message: 'Слишком короткое имя' };
-            }
-            
-            // Проверяем в таблице профилей
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('username')
-                .eq('username', username.toLowerCase());
-            
-            if (error) {
-                console.error('Error checking username:', error);
-                return { available: false, message: 'Ошибка проверки' };
-            }
-            
-            if (data && data.length > 0) {
-                return { available: false, message: 'Имя уже занято' };
-            }
-            
-            // Дополнительные проверки
-            const reservedNames = ['admin', 'moderator', 'system', 'support', 'minecraft'];
-            if (reservedNames.includes(username.toLowerCase())) {
-                return { available: false, message: 'Это имя зарезервировано' };
-            }
-            
-            // Проверка на недопустимые символы
-            const validRegex = /^[a-zA-Z0-9_]+$/;
-            if (!validRegex.test(username)) {
-                return { available: false, message: 'Только буквы, цифры и подчеркивание' };
-            }
-            
-            return { available: true, message: 'Имя доступно' };
-        }
-
-        // Выход
-        async function logout() {
-            await supabase.auth.signOut();
-            currentUser = null;
-            location.reload();
-        }
-
-        // Загрузка комментариев
-        async function loadComments() {
-            const sections = ['what', 'goals', 'progress', 'screenshots'];
-            
-            for (const section of sections) {
-                const { data: comments, error } = await supabase
-                    .from('comments')
-                    .select('*, profiles(username)')
-                    .eq('section', section)
-                    .order('created_at', { ascending: false });
-                
-                if (!error && comments) {
-                    renderComments(section, comments);
-                }
-            }
-        }
-
-        // Отображение комментариев
-        function renderComments(section, comments) {
-            const container = document.getElementById(`comments${section.charAt(0).toUpperCase() + section.slice(1)}`);
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            if (comments.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted">Комментариев пока нет</p>';
-                return;
-            }
-            
-            // Группируем комментарии по родительским
-            const parentComments = comments.filter(c => !c.parent_id);
-            const childComments = comments.filter(c => c.parent_id);
-            
-            // Отображаем родительские комментарии
-            parentComments.forEach(comment => {
-                container.appendChild(createCommentElement(comment, section));
-                
-                // Отображаем ответы к этому комментарию
-                const replies = childComments.filter(c => c.parent_id === comment.id);
-                if (replies.length > 0) {
-                    const replyContainer = document.createElement('div');
-                    replyContainer.className = 'reply-section';
-                    replies.forEach(reply => {
-                        replyContainer.appendChild(createCommentElement(reply, section));
-                    });
-                    container.appendChild(replyContainer);
-                }
-            });
-        }
-
-        // Создание элемента комментария
-        function createCommentElement(comment, section) {
-            const div = document.createElement('div');
-            div.className = 'comment';
-            div.id = `comment-${comment.id}`;
-            
-            const username = comment.profiles?.username || 'Аноним';
-            const time = new Date(comment.created_at).toLocaleString('ru-RU');
-            
-            // Проверяем голос текущего пользователя
-            let userVote = 0;
-            if (currentUser) {
-                // Здесь нужно загрузить голос пользователя
-                // Пока оставляем 0
-            }
-            
-            div.innerHTML = `
-                <div class="comment-header">
-                    <span class="comment-author">${username}</span>
-                    <span class="comment-time">${time}</span>
-                </div>
-                <div class="comment-content">${escapeHtml(comment.content)}</div>
-                <div class="comment-actions">
-                    <button class="vote-btn ${userVote === 1 ? 'text-success' : ''}" onclick="voteComment('${comment.id}', 1)">
-                        <i class="fas fa-thumbs-up"></i>
-                    </button>
-                    <span class="vote-count" id="votes-${comment.id}">${comment.likes || 0}</span>
-                    <button class="vote-btn ${userVote === -1 ? 'text-danger' : ''}" onclick="voteComment('${comment.id}', -1)">
-                        <i class="fas fa-thumbs-down"></i>
-                    </button>
-                    ${currentUser ? `
-                        <button class="reply-btn ms-3" onclick="startReply('${comment.id}', '${username}')">
-                            <i class="fas fa-reply"></i> Ответить
-                        </button>
-                    ` : ''}
-                </div>
-                ${replyingToComment === comment.id ? `
-                    <div class="mt-3">
-                        <textarea class="form-input" id="reply-${comment.id}" placeholder="Ваш ответ..." rows="2"></textarea>
-                        <button class="minecraft-btn mt-2" onclick="submitReply('${comment.id}', '${section}')">Отправить</button>
-                        <button class="minecraft-btn mt-2" style="background-color: #444;" onclick="cancelReply()">Отмена</button>
+                html += `
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">${username}</span>
+                            <span class="comment-time">${date}</span>
+                        </div>
+                        <p>${escapeHtml(comment.content)}</p>
+                        <div class="vote-buttons">
+                            <button class="vote-btn like-btn" onclick="voteComment('${comment.id}', 1)">👍</button>
+                            <span>${comment.likes || 0}</span>
+                            <button class="vote-btn dislike-btn" onclick="voteComment('${comment.id}', -1)">👎</button>
+                        </div>
                     </div>
-                ` : ''}
-            `;
+                `;
+            });
             
-            return div;
+            container.innerHTML = html;
         }
-
-        // Добавление комментария
+        
         async function addComment(section) {
             if (!currentUser) {
-                showAuthModal('login');
+                showAuthModal();
                 return;
             }
             
-            const textarea = document.getElementById(`comment${section.charAt(0).toUpperCase() + section.slice(1)}`);
-            const content = textarea.value.trim();
+            const sectionMap = {
+                'what': 1,
+                'goals': 2,
+                'progress': 3,
+                'screenshots': 4
+            };
+            
+            const input = document.getElementById(`commentInput${sectionMap[section]}`);
+            const content = input.value.trim();
             
             if (!content) {
                 alert('Введите текст комментария');
                 return;
             }
             
-            // Получаем username из профиля
+            // Получаем профиль
             const { data: profile } = await supabase
                 .from('profiles')
                 .select('username')
                 .eq('id', currentUser.id)
                 .single();
             
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('comments')
                 .insert({
                     user_id: currentUser.id,
@@ -1026,78 +838,23 @@
                     content: content,
                     section: section,
                     likes: 0
-                })
-                .select();
+                });
             
             if (error) {
-                console.error('Error adding comment:', error);
-                alert('Ошибка при добавлении комментария');
+                alert('Ошибка при отправке комментария');
             } else {
-                textarea.value = '';
-                loadComments(); // Перезагружаем комментарии
+                input.value = '';
+                loadComments(sectionMap[section]);
             }
         }
-
-        // Начать ответ на комментарий
-        function startReply(commentId, username) {
-            replyingToComment = commentId;
-            loadComments(); // Перезагружаем для показа формы ответа
-        }
-
-        // Отмена ответа
-        function cancelReply() {
-            replyingToComment = null;
-            loadComments();
-        }
-
-        // Отправить ответ
-        async function submitReply(commentId, section) {
-            if (!currentUser) return;
-            
-            const textarea = document.getElementById(`reply-${commentId}`);
-            const content = textarea.value.trim();
-            
-            if (!content) {
-                alert('Введите текст ответа');
-                return;
-            }
-            
-            // Получаем username из профиля
-            const { data: profile } = await supabase
-                .from('profiles')
-                .select('username')
-                .eq('id', currentUser.id)
-                .single();
-            
-            const { data, error } = await supabase
-                .from('comments')
-                .insert({
-                    user_id: currentUser.id,
-                    username: profile?.username,
-                    content: content,
-                    section: section,
-                    parent_id: commentId,
-                    likes: 0
-                })
-                .select();
-            
-            if (error) {
-                console.error('Error adding reply:', error);
-                alert('Ошибка при добавлении ответа');
-            } else {
-                replyingToComment = null;
-                loadComments();
-            }
-        }
-
-        // Голосование за комментарий
+        
         async function voteComment(commentId, voteType) {
             if (!currentUser) {
-                showAuthModal('login');
+                showAuthModal();
                 return;
             }
             
-            // Проверяем, голосовал ли уже пользователь
+            // Проверяем существующий голос
             const { data: existingVote } = await supabase
                 .from('votes')
                 .select('*')
@@ -1105,21 +862,19 @@
                 .eq('comment_id', commentId)
                 .single();
             
-            let newVoteType = voteType;
+            let finalVote = voteType;
             
-            // Если пользователь уже голосовал
             if (existingVote) {
-                // Если нажимает ту же кнопку - убирает голос
+                // Если нажимаем ту же кнопку - убираем голос
                 if (existingVote.vote_type === voteType) {
-                    newVoteType = 0;
+                    finalVote = 0;
                 }
-                // Обновляем существующий голос
+                
                 await supabase
                     .from('votes')
-                    .update({ vote_type: newVoteType })
+                    .update({ vote_type: finalVote })
                     .eq('id', existingVote.id);
             } else {
-                // Создаем новый голос
                 await supabase
                     .from('votes')
                     .insert({
@@ -1129,40 +884,24 @@
                     });
             }
             
-            // Обновляем счетчик лайков у комментария
+            // Пересчитываем лайки
             const { data: votes } = await supabase
                 .from('votes')
                 .select('vote_type')
                 .eq('comment_id', commentId);
             
-            const totalLikes = votes.reduce((sum, v) => sum + (v.vote_type || 0), 0);
+            const total = votes.reduce((sum, v) => sum + (v.vote_type || 0), 0);
             
             await supabase
                 .from('comments')
-                .update({ likes: totalLikes })
+                .update({ likes: total })
                 .eq('id', commentId);
             
-            // Обновляем отображение
-            loadComments();
+            // Обновляем комментарии
+            loadAllComments();
         }
-
-        // Загрузка галереи
-        async function loadGallery() {
-            const gallery = document.querySelector('.gallery-container');
-            gallery.innerHTML = `
-                <div class="gallery-item">
-                    <img src="https://via.placeholder.com/300x200/5b7c3a/ffffff?text=Minecraft+1" alt="Скриншот 1">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://via.placeholder.com/300x200/8b4513/ffffff?text=Minecraft+2" alt="Скриншот 2">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://via.placeholder.com/300x200/3d85c6/ffffff?text=Minecraft+3" alt="Скриншот 3">
-                </div>
-            `;
-        }
-
-        // Загрузка опросов
+        
+        // 📊 ОПРОСЫ
         async function loadPolls() {
             const container = document.getElementById('pollsContainer');
             
@@ -1173,98 +912,79 @@
                 .order('created_at', { ascending: false });
             
             if (error) {
-                container.innerHTML = '<p class="text-center text-danger">Ошибка загрузки опросов</p>';
+                container.innerHTML = '<div class="error">Ошибка загрузки опросов</div>';
                 return;
             }
             
-            if (polls.length === 0) {
-                container.innerHTML = '<p class="text-center">Опросов пока нет</p>';
+            if (!polls || polls.length === 0) {
+                container.innerHTML = '<p>Опросов пока нет</p>';
                 return;
             }
             
-            container.innerHTML = '';
+            let html = '';
             
             for (const poll of polls) {
-                await renderPoll(poll, container);
-            }
-        }
-
-        // Отображение опроса
-        async function renderPoll(poll, container) {
-            const options = poll.options || [];
-            
-            // Проверяем, голосовал ли текущий пользователь
-            let userVote = null;
-            if (currentUser) {
-                const { data: vote } = await supabase
+                // Проверяем, голосовал ли пользователь
+                let userVote = null;
+                if (currentUser) {
+                    const { data: vote } = await supabase
+                        .from('poll_votes')
+                        .select('option_index')
+                        .eq('user_id', currentUser.id)
+                        .eq('poll_id', poll.id)
+                        .single();
+                    
+                    userVote = vote?.option_index;
+                }
+                
+                // Получаем результаты
+                const { data: votes } = await supabase
                     .from('poll_votes')
                     .select('option_index')
-                    .eq('user_id', currentUser.id)
-                    .eq('poll_id', poll.id)
-                    .single();
+                    .eq('poll_id', poll.id);
                 
-                if (vote) {
-                    userVote = vote.option_index;
-                }
-            }
-            
-            // Получаем результаты голосования
-            const { data: votes, error } = await supabase
-                .from('poll_votes')
-                .select('option_index')
-                .eq('poll_id', poll.id);
-            
-            const voteCounts = {};
-            let totalVotes = 0;
-            
-            options.forEach((_, index) => {
-                voteCounts[index] = 0;
-            });
-            
-            if (votes) {
-                votes.forEach(vote => {
-                    voteCounts[vote.option_index] = (voteCounts[vote.option_index] || 0) + 1;
-                    totalVotes++;
+                const results = {};
+                let total = 0;
+                
+                poll.options.forEach((_, i) => results[i] = 0);
+                votes?.forEach(v => {
+                    results[v.option_index]++;
+                    total++;
                 });
+                
+                html += `
+                    <div class="section" style="margin: 15px 0;">
+                        <h3>${escapeHtml(poll.question)}</h3>
+                        <p><small>Всего голосов: ${total}</small></p>
+                `;
+                
+                poll.options.forEach((option, index) => {
+                    const percent = total > 0 ? Math.round((results[index] / total) * 100) : 0;
+                    
+                    html += `
+                        <div class="poll-option ${userVote === index ? 'selected' : ''}"
+                             onclick="${!userVote && currentUser ? `votePoll('${poll.id}', ${index})` : ''}"
+                             style="${userVote !== null ? 'cursor: default;' : ''}">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${escapeHtml(option)}</span>
+                                <span>${percent}% (${results[index]})</span>
+                            </div>
+                            <div style="background: #444; height: 10px; border-radius: 5px; margin-top: 5px;">
+                                <div style="background: #3d85c6; height: 100%; width: ${percent}%; border-radius: 5px;"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
             }
             
-            const pollElement = document.createElement('div');
-            pollElement.className = 'poll mb-4 p-3 border rounded';
-            pollElement.style.borderColor = 'var(--mc-green)';
-            
-            pollElement.innerHTML = `
-                <h5>${escapeHtml(poll.question)}</h5>
-                <p class="text-muted"><small>Всего голосов: ${totalVotes}</small></p>
-                
-                <div id="poll-options-${poll.id}">
-                    ${options.map((option, index) => `
-                        <div class="poll-option ${userVote === index ? 'selected' : ''}" 
-                             onclick="${currentUser && !userVote ? `votePoll('${poll.id}', ${index})` : ''}">
-                            <div class="d-flex justify-content-between">
-                                <span>${escapeHtml(option)}</span>
-                                ${userVote !== null ? `<span>${voteCounts[index] || 0} (${totalVotes > 0 ? Math.round((voteCounts[index] / totalVotes) * 100) : 0}%)</span>` : ''}
-                            </div>
-                            ${userVote !== null ? `
-                                <div class="progress-bar mt-2">
-                                    <div class="progress-fill" style="width: ${totalVotes > 0 ? (voteCounts[index] / totalVotes) * 100 : 0}%"></div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-                
-                ${userVote !== null ? '' : `
-                    <p class="text-center mt-3"><small>Войдите, чтобы проголосовать</small></p>
-                `}
-            `;
-            
-            container.appendChild(pollElement);
+            container.innerHTML = html;
         }
-
-        // Голосование в опросе
+        
         async function votePoll(pollId, optionIndex) {
             if (!currentUser) {
-                showAuthModal('login');
+                showAuthModal();
                 return;
             }
             
@@ -1277,158 +997,102 @@
                 .single();
             
             if (existingVote) {
-                alert('Вы уже проголосовали в этом опросе');
+                alert('Вы уже голосовали в этом опросе');
                 return;
             }
             
-            // Сохраняем голос
-            const { error } = await supabase
-                .from('poll_votes')
-                .insert({
-                    user_id: currentUser.id,
-                    poll_id: pollId,
-                    option_index: optionIndex
-                });
+            await supabase.from('poll_votes').insert({
+                user_id: currentUser.id,
+                poll_id: pollId,
+                option_index: optionIndex
+            });
             
-            if (error) {
-                console.error('Error voting:', error);
-                alert('Ошибка при голосовании');
-            } else {
-                // Перезагружаем опросы
-                loadPolls();
-            }
+            loadPolls();
         }
-
-        // Показать модальное окно создания опроса
-        function showCreatePollModal() {
+        
+        function createPollModal() {
             if (!currentUser) {
-                showAuthModal('login');
+                showAuthModal();
                 return;
             }
             
-            document.getElementById('createPollModal').style.display = 'flex';
-            document.getElementById('pollError').style.display = 'none';
+            document.getElementById('pollModal').style.display = 'flex';
             document.getElementById('pollQuestion').value = '';
             document.getElementById('pollOptions').innerHTML = `
-                <input type="text" class="form-input mb-2" placeholder="Вариант 1">
-                <input type="text" class="form-input mb-2" placeholder="Вариант 2">
+                <input type="text" placeholder="Вариант 1">
+                <input type="text" placeholder="Вариант 2">
             `;
         }
-
-        // Скрыть модальное окно создания опроса
-        function hideCreatePollModal() {
-            document.getElementById('createPollModal').style.display = 'none';
+        
+        function hidePollModal() {
+            document.getElementById('pollModal').style.display = 'none';
         }
-
-        // Добавить вариант в опрос
+        
         function addPollOption() {
-            const optionsContainer = document.getElementById('pollOptions');
-            const optionCount = optionsContainer.children.length;
+            const container = document.getElementById('pollOptions');
+            const count = container.children.length;
             
-            if (optionCount >= 10) {
+            if (count >= 10) {
                 alert('Максимум 10 вариантов');
                 return;
             }
             
-            const newOption = document.createElement('input');
-            newOption.type = 'text';
-            newOption.className = 'form-input mb-2';
-            newOption.placeholder = `Вариант ${optionCount + 1}`;
-            
-            optionsContainer.appendChild(newOption);
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `Вариант ${count + 1}`;
+            container.appendChild(input);
         }
-
-        // Создать опрос
+        
         async function createPoll() {
-            if (!currentUser) return;
-            
             const question = document.getElementById('pollQuestion').value.trim();
-            const optionsInputs = document.getElementById('pollOptions').getElementsByTagName('input');
-            const errorElement = document.getElementById('pollError');
+            const optionsInputs = document.getElementById('pollOptions').children;
+            const errorEl = document.getElementById('pollError');
             
-            // Валидация
             if (!question) {
-                errorElement.textContent = 'Введите вопрос опроса';
-                errorElement.style.display = 'block';
+                errorEl.textContent = 'Введите вопрос';
+                errorEl.style.display = 'block';
                 return;
             }
             
             const options = [];
             for (let input of optionsInputs) {
                 const value = input.value.trim();
-                if (value) {
-                    options.push(value);
-                }
+                if (value) options.push(value);
             }
             
             if (options.length < 2) {
-                errorElement.textContent = 'Добавьте минимум 2 варианта ответа';
-                errorElement.style.display = 'block';
+                errorEl.textContent = 'Нужно минимум 2 варианта';
+                errorEl.style.display = 'block';
                 return;
             }
             
-            if (options.length > 10) {
-                errorElement.textContent = 'Максимум 10 вариантов';
-                errorElement.style.display = 'block';
-                return;
-            }
-            
-            // Создаем опрос
-            const { error } = await supabase
-                .from('polls')
-                .insert({
-                    question: question,
-                    options: options,
-                    is_active: true
-                });
+            const { error } = await supabase.from('polls').insert({
+                question,
+                options,
+                is_active: true
+            });
             
             if (error) {
-                errorElement.textContent = 'Ошибка при создании опроса';
-                errorElement.style.display = 'block';
-                console.error('Error creating poll:', error);
+                errorEl.textContent = 'Ошибка при создании опроса';
+                errorEl.style.display = 'block';
             } else {
-                hideCreatePollModal();
-                loadPolls(); // Перезагружаем опросы
-                
-                // Показываем уведомление
-                showNotification('Опрос успешно создан!');
+                hidePollModal();
+                loadPolls();
+                alert('Опрос создан!');
             }
         }
-
-        // Показать уведомление
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'position-fixed top-0 end-0 p-3';
-            notification.style.zIndex = '1050';
-            
-            notification.innerHTML = `
-                <div class="toast show" role="alert">
-                    <div class="toast-header" style="background-color: var(--mc-green); color: white;">
-                        <strong class="me-auto">Уведомление</strong>
-                        <button type="button" class="btn-close btn-close-white" onclick="this.parentElement.parentElement.remove()"></button>
-                    </div>
-                    <div class="toast-body">
-                        ${message}
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Автоматическое удаление через 5 секунд
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 5000);
-        }
-
-        // Экранирование HTML
+        
+        // 🛡️ ЭКРАНИРОВАНИЕ HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
+        
+        // 📱 АВТОРАСКРЫТИЕ ПЕРВОЙ СЕКЦИИ
+        setTimeout(() => {
+            toggleAnswer(1);
+        }, 500);
     </script>
 </body>
-                        </html>
+                </html>
