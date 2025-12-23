@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Автостопом по краю</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* ПРОСТЫЕ СТИЛИ */
+        body {
+            background: #2d2d2d;
+            color: white;
+            font-family: Arial;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: #5b7c3a;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 3px solid #8b4513;
+        }
+        
+        h1 {
+            margin: 0;
+            color: white;
+        }
+        
+        .section {
+            background: #4a3c2a;
+            border: 2px solid #8b4513;
+            border-radius: 10px;
+            margin: 15px 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .question {
+            background: #8b4513;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .answer {
+            padding: 20px;
+            display: none;
+        }
+        
+        .answer.show {
+            display: block;
+        }
+        
+        button, input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 2px solid #555;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #3d85c6;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #2b6cb0;
+        }
+        
+        .comment {
+            background: #3a3a3a;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #5b7c3a;
+        }
+        
+        .auth-form {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .user-info {
+            background: #5b7c3a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ШАПКА -->
+    <div class="header">
+        <h1>🔨 Автостопом по краю</h1>
+        <p>Мой Minecraft проект</p>
+    </div>
+    
+    <!-- АВТОРИЗАЦИЯ -->
+    <div id="authSection">
+        <div class="auth-form">
+            <h3>Вход / Регистрация</h3>
+            <div id="authMessage" style="display: none; padding: 10px; border-radius: 5px; margin: 10px 0;"></div>
+            
+            <!-- РЕГИСТРАЦИЯ -->
+            <div id="registerForm">
+                <input type="text" id="regUsername" placeholder="Имя пользователя">
+                <input type="email" id="regEmail" placeholder="Email">
+                <input type="password" id="regPassword" placeholder="Пароль (6+ символов)">
+                <button onclick="register()">Зарегистрироваться</button>
+                <p style="text-align: center; color: #aaa;">
+                    Уже есть аккаунт? <a href="#" onclick="showLogin()" style="color: #3d85c6;">Войти</a>
+                </p>
+            </div>
+            
+            <!-- ВХОД -->
+            <div id="loginForm" style="display: none;">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="login()">Войти</button>
+                <p style="text-align: center; color: #aaa;">
+                    Нет аккаунта? <a href="#" onclick="showRegister()" style="color: #3d85c6;">Зарегистрироваться</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ -->
+    <div id="userInfo" class="user-info" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                👤 <strong id="username"></strong>
+            </div>
+            <button onclick="logout()" style="width: auto; padding: 8px 16px;">Выйти</button>
+        </div>
+    </div>
+    
+    <!-- СЕКЦИЯ 1 -->
+    <div class="section">
+        <div class="question" onclick="toggleSection(1)">
+            Что такое «Автостопом по краю»?
+        </div>
+        <div class="answer" id="section1">
+            <p>"Автостопом по краю" — это проект в Майнкрафте где я просто строю дома и прохожу весь майнкрафт.</p>
+            
+            <!-- КОММЕНТАРИИ -->
+            <div style="margin-top: 20px; border-top: 2px dashed #5a4a3a; padding-top: 20px;">
+                <h4>💬 Комментарии</h4>
+                <div id="comments1"></div>
+                <textarea id="comment1" placeholder="Ваш комментарий..." rows="3"></textarea>
+                <button onclick="addComment('what')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- СЕКЦИЯ 2 -->
+    <div class="section">
+        <div class="question" onclick="toggleSection(2)">
+            Какие цели у проекта?
+        </div>
+        <div class="answer" id="section2">
+            <p>• Построить деревню с жителями</p>
+            <p>• Убить Эндер Дракона</p>
+            <p>• Получить незеритовые инструменты</p>
+            <p>• Построить 3 фермы</p>
+            <p>• Получить незеритовую броню</p>
+            <p>• Построить город</p>
+            
+            <!-- КОММЕНТАРИИ -->
+            <div style="margin-top: 20px; border-top: 2px dashed #5a4a3a; padding-top: 20px;">
+                <h4>💬 Комментарии</h4>
+                <div id="comments2"></div>
+                <textarea id="comment2" placeholder="Ваш комментарий..." rows="3"></textarea>
+                <button onclick="addComment('goals')">Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- СЕКЦИЯ 3 -->
+    <div class="section">
+        <div class="question" onclick="toggleSection(3)">
+            Что уже сделано?
+        </div>
+        <div class="answer" id="section3">
+            <p>✅ Построена хижина</p>
+            <p>✅ Добыты алмазы</p>
+            <p>🔄 Строится ферма</p>
+            <p>❌ Не убит Дракон</p>
+            
+            <!-- КОММЕНТАРИИ -->
+            <div style="margin-top: 20px; border-top: 2px dashed #5a4a3a; padding-top: 20px;">
+                <h4>💬 Комментарии</h4>
+                <div id="comments3"></div>
+                <textarea id="comment3" placeholder="Ваш комментарий..." rows="3"></textarea>
+                <button onclick="addComment('progress')">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // 🔧 НАСТРОЙКИ SUPABASE
+        const SUPABASE_URL = 'https://vpgzjvkrqgvcewjhxuay.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_q-PJ_EmdubLQ9o46S1tVDg_XH1ucyHE';
+        
+        // 📦 ПОДКЛЮЧЕНИЕ
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // 👤 ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ
+        let currentUser = null;
+        
+        // 🚀 ЗАГРУЗКА САЙТА
+        window.onload = async function() {
+            await checkAuth();
+            loadComments();
+            toggleSection(1); // Открываем первую секцию
+        };
+        
+        // 🔐 ПРОВЕРКА АВТОРИЗАЦИИ
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                currentUser = user;
+                showUserInfo();
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('userInfo').style.display = 'block';
+            } else {
+                document.getElementById('authSection').style.display = 'block';
+                document.getElementById('userInfo').style.display = 'none';
+            }
+        }
+        
+        // 👤 ПОКАЗАТЬ ИНФО О ПОЛЬЗОВАТЕЛЕ
+        async function showUserInfo() {
+            // Получаем профиль
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('username')
+                .eq('id', currentUser.id)
+                .single();
+            
+            if (profile) {
+                document.getElementById('username').textContent = profile.username;
+            } else {
+                document.getElementById('username').textContent = currentUser.email;
+            }
+        }
+        
+        // 🔄 ПЕРЕКЛЮЧЕНИЕ ФОРМ
+        function showLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            clearAuthMessage();
+        }
+        
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            clearAuthMessage();
+        }
+        
+        function clearAuthMessage() {
+            const msg = document.getElementById('authMessage');
+            msg.style.display = 'none';
+            msg.textContent = '';
+        }
+        
+        // 📝 РЕГИСТРАЦИЯ (ПРОСТАЯ!)
+        async function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const msg = document.getElementById('authMessage');
+            
+            // Проверка
+            if (!username || !email || !password) {
+                showMessage('Заполните все поля', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Пароль минимум 6 символов', 'error');
+                return;
+            }
+            
+            try {
+                // 1. Регистрируем в Supabase
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password
+                });
+                
+                if (authError) {
+                    showMessage(authError.message, 'error');
+                    return;
+                }
+                
+                // 2. Создаем профиль в таблице profiles
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: authData.user.id,
+                        username: username
+                    });
+                
+                if (profileError) {
+                    showMessage(profileError.message, 'error');
+                } else {
+                    showMessage('Регистрация успешна! Проверьте почту.', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+                
+            } catch (err) {
+                showMessage('Ошибка: ' + err.message, 'error');
+            }
+        }
+        
+        // 🔓 ВХОД
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const msg = document.getElementById('authMessage');
+            
+            if (!email || !password) {
+                showMessage('Заполните все поля', 'error');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    showMessage(error.message, 'error');
+                } else {
+                    showMessage('Вход успешен!', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            } catch (err) {
+                showMessage('Ошибка сети', 'error');
+            }
+        }
+        
+        // 🚪 ВЫХОД
+        async function logout() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
+        
+        // 📖 РАСКРЫТИЕ СЕКЦИЙ
+        function toggleSection(num) {
+            const section = document.getElementById('section' + num);
+            const isVisible = section.classList.contains('show');
+            
+            // Закрываем все
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('section' + i).classList.remove('show');
+            }
+            
+            // Открываем нужную
+            if (!isVisible) {
+                section.classList.add('show');
+            }
+        }
+        
+        // 💬 КОММЕНТАРИИ
+        async function loadComments() {
+            const sections = [
+                { id: 'comments1', section: 'what' },
+                { id: 'comments2', section: 'goals' },
+                { id: 'comments3', section: 'progress' }
+            ];
+            
+            for (const item of sections) {
+                const container = document.getElementById(item.id);
+                
+                try {
+                    // Пробуем получить комментарии
+                    const { data: comments, error } = await supabase
+                        .from('comments')
+                        .select('*')
+                        .eq('section', item.section)
+                        .order('created_at', { ascending: false })
+                        .limit(10);
+                    
+                    if (error) {
+                        // Если таблицы нет - создаем простой интерфейс
+                        container.innerHTML = '<p>Комментариев пока нет</p>';
+                        continue;
+                    }
+                    
+                    if (!comments || comments.length === 0) {
+                        container.innerHTML = '<p>Комментариев пока нет</p>';
+                        continue;
+                    }
+                    
+                    let html = '';
+                    comments.forEach(comment => {
+                        html += `
+                            <div class="comment">
+                                <strong>${comment.username || 'Аноним'}:</strong>
+                                <p>${comment.content}</p>
+                                <small style="color: #888;">${new Date(comment.created_at).toLocaleDateString()}</small>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html;
+                    
+                } catch (err) {
+                    container.innerHTML = '<p>Ошибка загрузки</p>';
+                }
+            }
+        }
+        
+        // ➕ ДОБАВЛЕНИЕ КОММЕНТАРИЯ
+        async function addComment(section) {
+            if (!currentUser) {
+                showMessage('Войдите чтобы комментировать', 'error');
+                return;
+            }
+            
+            const sectionMap = {
+                'what': { textarea: 'comment1', container: 'comments1' },
+                'goals': { textarea: 'comment2', container: 'comments2' },
+                'progress': { textarea: 'comment3', container: 'comments3' }
+            };
+            
+            const config = sectionMap[section];
+            const textarea = document.getElementById(config.textarea);
+            const content = textarea.value.trim();
+            
+            if (!content) {
+                showMessage('Введите текст', 'error');
+                return;
+            }
+            
+            try {
+                // Получаем имя пользователя
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('username')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                // Создаем таблицу comments если её нет
+                const { error } = await supabase
+                    .from('comments')
+                    .insert({
+                        user_id: currentUser.id,
+                        username: profile?.username || currentUser.email,
+                        content: content,
+                        section: section
+                    });
+                
+                if (error) {
+                    // Если таблицы нет, используем localStorage
+                    saveCommentLocal(section, content, profile?.username || currentUser.email);
+                } else {
+                    textarea.value = '';
+                    loadComments();
+                    showMessage('Комментарий добавлен!', 'success');
+                }
+                
+            } catch (err) {
+                // Fallback на localStorage
+                saveCommentLocal(section, content, 'Пользователь');
+            }
+        }
+        
+        // 💾 LOCALSTORAGE (если Supabase не работает)
+        function saveCommentLocal(section, content, username) {
+            const key = `comments_${section}`;
+            const comments = JSON.parse(localStorage.getItem(key) || '[]');
+            
+            comments.unshift({
+                username: username,
+                content: content,
+                time: new Date().toLocaleString()
+            });
+            
+            localStorage.setItem(key, JSON.stringify(comments));
+            
+            // Обновляем отображение
+            const sectionMap = {
+                'what': 'comments1',
+                'goals': 'comments2',
+                'progress': 'comments3'
+            };
+            
+            const container = document.getElementById(sectionMap[section]);
+            let html = '';
+            comments.forEach(comment => {
+                html += `
+                    <div class="comment">
+                        <strong>${comment.username}:</strong>
+                        <p>${comment.content}</p>
+                        <small style="color: #888;">${comment.time}</small>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById(`comment${section === 'what' ? 1 : section === 'goals' ? 2 : 3}`).value = '';
+            showMessage('Комментарий сохранен локально', 'success');
+        }
+        
+        // 💬 СООБЩЕНИЯ
+        function showMessage(text, type) {
+            const msg = document.getElementById('authMessage');
+            msg.textContent = text;
+            msg.style.display = 'block';
+            msg.style.background = type === 'error' ? '#ff6b6b20' : '#51cf6620';
+            msg.style.color = type === 'error' ? '#ff6b6b' : '#51cf66';
+            msg.style.border = type === 'error' ? '1px solid #ff6b6b' : '1px solid #51cf66';
+            
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
